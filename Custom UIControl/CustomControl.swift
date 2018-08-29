@@ -19,6 +19,8 @@ class CustomControl: UIControl {
     private let componentActiveColor = UIColor.black
     private let componentInactiveColor = UIColor.gray
     
+    private let rightToLeft = true
+    
     required init?(coder aCoder: NSCoder) {
         super.init(coder: aCoder)
         
@@ -63,14 +65,20 @@ class CustomControl: UIControl {
         
         for componentIndex in 1...componentCount {
             let label = UILabel(frame: CGRect(x: (componentDimension + 8.0) * CGFloat(componentIndex - 1) + 8.0, y: 0, width: componentDimension, height: componentDimension))
-            label.tag = componentIndex
+            if rightToLeft {
+                // In right to left mode, make sure the label tags go from big to small
+                label.tag = 1 + componentCount - componentIndex
+            } else {
+                // In left to right mode, make sure the label tags go from small to big
+                label.tag = componentIndex
+            }
             label.font = UIFont.boldSystemFont(ofSize: 32.0)
             label.text = "★"
             label.textAlignment = .center
             // Set a random background color so the label's placement is obvious
 //            label.backgroundColor = UIColor(hue: CGFloat(drand48()), saturation: 1, brightness: 1, alpha: 0.5)
             
-            if componentIndex <= value {
+            if label.tag <= value {
                 label.textColor = componentActiveColor
             } else {
                 label.textColor = componentInactiveColor
