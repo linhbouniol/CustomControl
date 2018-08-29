@@ -62,11 +62,13 @@ class CustomControl: UIControl {
 //        label5.text = "★"
         
         for componentIndex in 1...componentCount {
-            let label = UILabel(frame: CGRect(x: componentDimension * CGFloat(componentIndex - 1) + 8.0, y: 0, width: componentDimension, height: componentDimension))
+            let label = UILabel(frame: CGRect(x: (componentDimension + 8.0) * CGFloat(componentIndex - 1) + 8.0, y: 0, width: componentDimension, height: componentDimension))
             label.tag = componentIndex
             label.font = UIFont.boldSystemFont(ofSize: 32.0)
             label.text = "★"
             label.textAlignment = .center
+            // Set a random background color so the label's placement is obvious
+//            label.backgroundColor = UIColor(hue: CGFloat(drand48()), saturation: 1, brightness: 1, alpha: 0.5)
             
             if componentIndex <= value {
                 label.textColor = componentActiveColor
@@ -82,10 +84,13 @@ class CustomControl: UIControl {
     
     func updateValue(at touch: UITouch) {
         for label in labelsArray {
-            let touchPoint = touch.location(in: self)
+            let touchPoint = touch.location(in: label)
             if label.bounds.contains(touchPoint) {
-                value = label.tag
-                sendActions(for: .valueChanged)
+                if value != label.tag {
+                    value = label.tag
+                    sendActions(for: [.valueChanged, .primaryActionTriggered])
+                    label.performFlare()
+                }
             }
         }
         
@@ -109,9 +114,10 @@ class CustomControl: UIControl {
         let touchPoint = touch.location(in: self)
         if bounds.contains(touchPoint) {
             updateValue(at: touch)
-            sendActions(for: [.touchDragInside, .valueChanged])
+            // It seems like the control sends .touchDragInside and .touchDragOutside automatically
+//            sendActions(for: [.touchDragInside])
         } else {
-            sendActions(for: [.touchDragOutside])
+//            sendActions(for: [.touchDragOutside])
         }
         return true
     }
@@ -124,14 +130,28 @@ class CustomControl: UIControl {
         let touchPoint = touch.location(in: self)
         if bounds.contains(touchPoint) {
             updateValue(at: touch)
-            sendActions(for: [.touchUpInside, .valueChanged])
+            // It seems like the control sends .touchUpInside and .touchUpOutside automatically
+//            sendActions(for: [.touchUpInside])
         } else {
-            sendActions(for: [.touchUpOutside])
+//            sendActions(for: [.touchUpOutside])
         }
     }
     
-    override func cancelTracking(with event: UIEvent?) {
-        sendActions(for: [.touchCancel])
+    // Here, .touchCancel is called automatically, and there is nothing else to do in cancel, so rather than overriding it only to call super.cancelTracking, we do nothing
+//    override func cancelTracking(with event: UIEvent?) {
+//        sendActions(for: [.touchCancel])
+//    }
+}
+
+extension UIView {
+    // "Flare view" animation sequence
+    func performFlare() {
+        func flare()   { transform = CGAffineTransform(scaleX: 1.6, y: 1.6) }
+        func unflare() { transform = .identity }
+
+        UIView.animate(withDuration: 0.3,
+                       animations: { flare() },
+                       completion: { _ in UIView.animate(withDuration: 0.1) { unflare() }})
     }
 }
 

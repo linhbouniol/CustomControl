@@ -13,7 +13,7 @@
         <!--Title-->
         <scene sceneID="hPY-YD-SW8">
             <objects>
-                <viewController id="Mte-BG-zPd" sceneMemberID="viewController">
+                <viewController id="Mte-BG-zPd" customClass="ViewController" customModule="Custom_UIControl" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="i9T-AL-44O">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -22,7 +22,7 @@
                                 <rect key="frame" x="67" y="269" width="240" height="128"/>
                                 <color key="backgroundColor" red="1" green="0.63316048744896802" blue="0.8568785487360584" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <connections>
-                                    <action selector="updateRating:" destination="FSG-SA-sp1" eventType="valueChanged" id="1to-hL-05l"/>
+                                    <action selector="updateRating:" destination="Mte-BG-zPd" eventType="valueChanged" id="aNt-DQ-Pzw"/>
                                 </connections>
                             </view>
                         </subviews>
@@ -36,7 +36,6 @@
                     <navigationItem key="navigationItem" title="Title" id="px0-rr-I0S"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="No2-gh-l4i" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="FSG-SA-sp1" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="904.79999999999995" y="130.88455772113943"/>
         </scene>
